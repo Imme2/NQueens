@@ -1,6 +1,6 @@
 # NQueens
 
-Just a few examples on how to solve the NQueens problem.
+Just a few examples on how to solve the NQueens problem in Python.
 
 i'll be publishing both the Backtracking solution and one with a metaheuristic called Minimum conflicts.
 
