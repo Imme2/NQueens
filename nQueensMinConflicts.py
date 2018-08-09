@@ -1,6 +1,6 @@
 # This code implements the minimum conflict heuristic
 # To solve a board, we start from a random state (or a good random state if you have a heuristic)
-# Then change the position with the most conflicts to the least conflicts possible.
+# Then change the of a threatened queen to the least conflicts possible.
 # Do this iteratively to reach a local optimum (which is hopefully the global one as well)
 
 from random import shuffle,choice
@@ -46,7 +46,7 @@ def SolveNQueens(N):
 			conflictsLeft[left] += 1
 			conflictsRight[right] += 1
 
-
+		changes = 0
 		for steps in range(0,maxSteps):
 			# initialize variables
 			threatened = []
@@ -70,9 +70,11 @@ def SolveNQueens(N):
 			# If there were conflicts we gotta try fixing them
 			# Choose which new position has the least conflicts
 			posMinConflict = board[posToChange]
-			minConflict = N**2  # A really big number
+
+			# minConflict is the current one
+			minConflict = (rowsDict[board[posToChange]] != 0) +  (conflictsLeft[board[posToChange] + posToChange] != 0) + (conflictsRight[board[posToChange] - posToChange] != 0)
 			for newPos in range(0,N):
-				conflicts = (rowsDict[newPos] != 0) +  (conflictsLeft[newPos + posToChange] != 0) + (conflictsRight[posToChange - newPos] != 0)
+				conflicts = (rowsDict[newPos] != 0) +  (conflictsLeft[newPos + posToChange] != 0) + (conflictsRight[newPos - posToChange] != 0)
 				if conflicts < minConflict: # we use lesser than equal in the hopes it'll help with it not getting stuck
 					posMinConflict = newPos
 					minConflict = conflicts
@@ -80,24 +82,24 @@ def SolveNQueens(N):
 			# Change that position to the new position
 
 			# Change the conflict dictionaries to identify the change
-			rowsDict[board[posToChange]] -= 1
-			conflictsLeft[board[posToChange] + posToChange] -= 1
-			conflictsRight[board[posToChange] - posToChange] -= 1
 
-			if (board[posToChange] == posMinConflict):
-				print("Unnecesary change?")
-			changes += 1
+			# Dont do unnecesary changes:
+			if (board[posToChange] != posMinConflict):				
+				rowsDict[board[posToChange]] -= 1
+				conflictsLeft[board[posToChange] + posToChange] -= 1
+				conflictsRight[board[posToChange] - posToChange] -= 1
+
+				changes += 1
 
 
-			board[posToChange] = posMinConflict
+				board[posToChange] = posMinConflict
 
-			# Put new conflicts in the dictionaries
-			rowsDict[board[posToChange]] += 1
-			conflictsLeft[board[posToChange] + posToChange] += 1
-			conflictsRight[board[posToChange] - posToChange] += 1
+				# Put new conflicts in the dictionaries
+				rowsDict[board[posToChange]] += 1
+				conflictsLeft[board[posToChange] + posToChange] += 1
+				conflictsRight[board[posToChange] - posToChange] += 1
 
-		print("new try: Changes done: ",changes)
-		changes = 0
+		print("new try #",tries,":\n Changes done: ",changes)
 
 	return False
 
