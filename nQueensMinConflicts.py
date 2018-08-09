@@ -1,14 +1,22 @@
-# Get a number of queens, print solution
+# This code implements the minimum conflict heuristic
+# To solve a board, we start from a random state (or a good random state if you have a heuristic)
+# Then change the position with the most conflicts to the least conflicts possible.
+# Do this iteratively to reach a local optimum (which is hopefully the global one as well)
+
+
 
 from random import shuffle
 from collections import defaultdict
 
+# Gets a number of queens, print solution
 if __name__ == "__main__":
 	N = int(input())
 
 	board = SolveNQueens(N)
-
-	printBoard(board)
+	if not board:
+		print("We couldn't solve this board")
+	else:
+		printBoard(board)
 
 def printBoard(board):
 	N = len(board)
@@ -44,7 +52,9 @@ def SolveNQueens(N):
 		conflictsLeft[left] += 1
 		conflictsRight[right] += 1
 
-	# Helper function because code hell
+	# Helper function because otherwise it'll get too long
+	# For python newbies this is just a function declaration, where x is an argument and
+	# the return is the body of it.
 	getConflicts = lambda x: return rowsDict[board[x]] + conflictsLeft[board[x] + x] + conflictsRight[board[x] - x]
 
 	maxSteps = N + 700 # because why not 
@@ -55,16 +65,29 @@ def SolveNQueens(N):
 		maxConflicts = 0
 		posToChange = 0
 		# Choose the position with the most conflicts
-		for i in range(0,N):
-			conflicts = getConflicts(i)
-			posToChange = i if conflicts > maxConflicts else posToChange
+		for pos in range(0,N):
+			conflicts = getConflicts(pos)
+			posToChange = pos if conflicts > maxConflicts else posToChange
 			maxConflicts = max(maxConflicts,conflicts)
 
 		# if there are no conflicts we're done
 		if maxConflicts == 0:
-			break
+			return board
 
-	return board
+		# If there were conflicts we gotta try fixing them
+		# Choose which new position has the least conflicts
+		posMinConflict = board[posToChange]
+		minConflict = N**2  # A really big number
+		for newPos in range(0,N):
+			conflicts = rowsDict[newPos] +  conflictsLeft[newPos + posToChange] + conflictsRight[posToChange - newPos]
+			if conflicts <= minConflict: # we use lesser than equal in the hopes it'll help with it not getting stuck
+				posMinConflict = newPos
+				minConflict = conflicts
+
+		# Change that position to the new position
+		board[posToChange] = posMinConflict
+
+	return False
 
 
 
