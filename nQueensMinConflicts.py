@@ -24,7 +24,7 @@ def SolveNQueens(N):
 	# board[0] = 5  -> there's a queen in the position 0,5 
 	board = [i for i in range(N)]
 
-	maxSteps = N**2 + 10000 # because why not 
+	maxSteps = N + 1000  # it usually solves in less than 200 when it does. 
 	maxTries = N + 10
 
 	# try several times as this process depends on how good the initial solution is
