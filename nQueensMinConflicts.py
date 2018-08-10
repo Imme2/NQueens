@@ -30,7 +30,7 @@ def SolveNQueensMinConflict(N):
 
 	# try several times as this process depends on how good the initial solution is
 	for tries in range(0,maxTries):
-		changes = 0
+
 		# Initial solution
 		# Just place everything randomly (i dont remember a greedy algorithm for this)
 		shuffle(board)
