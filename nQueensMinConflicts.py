@@ -1,6 +1,6 @@
 # This code implements the minimum conflict heuristic
 # To solve a board, we start from a random state (or a good random state if you have a heuristic)
-# Then change the of a threatened queen to the least conflicts possible.
+# Then change the position of a threatened queen to the least conflicts possible.
 # Do this iteratively to reach a local optimum (which is hopefully the global one as well)
 
 from random import shuffle,choice
@@ -15,7 +15,7 @@ def printBoard(board):
 		print(''.join(strToPrint))
 
 
-def SolveNQueens(N):
+def SolveNQueensMinConflict(N):
 	if (N <= 3):
 		return False
 
@@ -25,6 +25,7 @@ def SolveNQueens(N):
 	board = [i for i in range(N)]
 
 	maxSteps = N + 1000  # it usually solves in less than 200 when it does. 
+						 # So a low number of steps actually makes it more efficient
 	maxTries = N + 10
 
 	# try several times as this process depends on how good the initial solution is
@@ -104,19 +105,11 @@ def SolveNQueens(N):
 	return False
 
 
-
-
-
-
-
-
-
-
 # Gets a number of queens, print solution
 if __name__ == "__main__":
 	N = int(input())
 
-	board = SolveNQueens(N)
+	board = SolveNQueensMinConflict(N)
 	if not board:
 		print("We couldn't solve this board")
 	else:
