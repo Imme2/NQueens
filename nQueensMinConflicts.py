@@ -54,7 +54,7 @@ def SolveNQueensMinConflict(N):
 
 			# If none are threatened, we're done
 			if len(threatened) == 0:
-				print("Done, changes done",changes)
+				#print("Done, changes done",changes)
 				return board
 			
 			# If there's threatened queens, choose randomly from them
@@ -92,7 +92,7 @@ def SolveNQueensMinConflict(N):
 				conflictsLeft[board[posToChange] + posToChange] += 1
 				conflictsRight[board[posToChange] - posToChange] += 1
 
-		print("new try #",tries,":\n Changes done: ",changes)
+		#print("new try #",tries,":\n Changes done: ",changes)
 
 	return False
 
